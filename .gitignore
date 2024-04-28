@@ -15,7 +15,7 @@ yarn*.log*
 
 # local env files
 .env*
-!.env.test
+!.env.example
 
 # typescript
 *.tsbuildinfo

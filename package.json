@@ -12,7 +12,7 @@
   "scripts": {
     "build": "run-s build:compile",
     "build:compile": "tsc",
-    "dev": "bun run src/app.ts",
+    "dev": "bun run src/server.ts",
     "lint": "run-s lint:eslint lint:prettier",
     "lint:eslint": "eslint ./src",
     "lint:prettier": "prettier --check --ignore-path .prettierignore './**/*.ts'",
