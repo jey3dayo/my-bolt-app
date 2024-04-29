@@ -1,9 +1,9 @@
 {
   "name": "my-bolt-app",
-  "packageManager": "bun@1.0.0",
+  "packageManager": "pnpm@8.6.7",
   "version": "0.0.0",
   "engines": {
-    "node": ">=18.0.0 <=20.x.x"
+    "node": "20.x.x"
   },
   "private": true,
   "type": "module",

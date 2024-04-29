@@ -1,3 +1,6 @@
 [env]
 _.file = [".env"]
 _.path = ["./node_modules/.bin"]
+
+[tools]
+node = '20.11.0'
