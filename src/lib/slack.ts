@@ -1,7 +1,8 @@
 import type { App, Context, GenericMessageEvent, AppMentionEvent, KnownEventFromType } from "@slack/bolt";
+import { BOT_USER, USER } from "./constants";
 
 type Users = {
-  [key: string]: "user" | "system";
+  [key: string]: BOT_USER | USER;
 };
 
 export async function getReplies({
