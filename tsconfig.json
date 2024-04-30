@@ -3,10 +3,10 @@
   "extends": "@tsconfig/node20/tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
-    "target": "ESNext" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
-    "module": "ESNext" /* Specify what module code is generated. */,
-    "moduleResolution": "Bundler" /* Specify how TypeScript looks up a file from a given module specifier. */,
-    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "forceConsistentCasingInFileNames": true,
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
@@ -17,5 +17,5 @@
     "outDir": "build"
   },
   "include": ["**/*.ts", "**/*.js", "**/*.mts", "**/*.mjs"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "build"]
 }

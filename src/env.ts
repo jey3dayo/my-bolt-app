@@ -1,7 +1,7 @@
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
 
-const env = createEnv({
+export const env = createEnv({
   server: {
     OPENAI_API_KEY: z.string().min(1),
     SLACK_BOT_TOKEN: z.string().min(1),
@@ -24,5 +24,3 @@ const env = createEnv({
   },
   skipValidation: !!process.env.CI,
 });
-
-export { env };

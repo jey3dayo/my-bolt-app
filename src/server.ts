@@ -1,5 +1,7 @@
-import { App } from "@slack/bolt";
-import { env } from "@/env";
+import slackBolt from "@slack/bolt";
+import { env } from "./env";
+
+const { App } = slackBolt;
 
 // ボットトークンと Signing Secret を使ってアプリを初期化します
 const app = new App({
@@ -16,11 +18,11 @@ app.message("hello", async ({ message, say }: any) => {
   await say(`Hey there <@${message.user}>!`);
 });
 
-app.message("", async ({ message, say }) => {
-  if (!message.subtype) {
-    await say(`Hello, <@${message.user}>. You said: ${message.text}`);
-  }
-});
+// app.message("", async ({ message, say }) => {
+//   if (!message.subtype) {
+//     await say(`Hello, <@${message.user}>. You said: ${message.text}`);
+//   }
+// });
 
 (async () => {
   // Start your app
