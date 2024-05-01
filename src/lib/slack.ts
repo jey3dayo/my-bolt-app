@@ -1,42 +1,35 @@
+import slackBolt, { LogLevel } from "@slack/bolt";
 import type { App, Context, GenericMessageEvent, AppMentionEvent, KnownEventFromType } from "@slack/bolt";
-import { BOT_USER, USER } from "./constants";
+import { env } from "../env";
+import { BOT_USER, USER } from "../constants";
 
-type Users = {
-  [key: string]: BOT_USER | USER;
+export type USER_TYPE = typeof BOT_USER | typeof USER;
+
+export type Users = {
+  [key: string]: USER_TYPE;
 };
 
-export async function getReplies({
-  client,
-  message,
-  users = {},
-}: {
-  client: App["client"];
-  message: GenericMessageEvent | AppMentionEvent | KnownEventFromType<"message">;
-  users: Users;
-}): Promise<string> {
-  const { channel, thread_ts, ts } = message as GenericMessageEvent;
-  const threadTimestamp = thread_ts ?? ts;
+export type Message = {
+  user: USER_TYPE | string;
+  text: string | undefined;
+};
 
-  const replies = await client.conversations.replies({
-    channel,
-    ts: threadTimestamp,
-    inclusive: true,
+export function getSlackApp() {
+  const { App } = slackBolt;
+
+  return new App({
+    token: env.SLACK_BOT_TOKEN,
+    signingSecret: env.SLACK_SIGNING_SECRET,
+    appToken: env.SLACK_APP_TOKEN,
+    port: Number(env.PORT || 3000),
+    socketMode: true,
+    logLevel: LogLevel.INFO,
   });
-
-  if (replies?.messages) {
-    const summary = replies.messages.map((v) => ({
-      user: users?.[v.user] ?? v.user,
-      text: v.text,
-    }));
-    return JSON.stringify(summary);
-  }
-
-  return "";
 }
 
-export function getUsers(context: Context): Users {
+function getUsers(context: Context): Users {
   const { botId, botUserId, userId } = context;
-  const users = {};
+  const users: Users = {};
 
   if (botId) users[botId] = "system";
   if (botUserId) users[botUserId] = "system";
@@ -45,6 +38,41 @@ export function getUsers(context: Context): Users {
   return users;
 }
 
-export const isGenericMessageEvent = (event: KnownEventFromType<"message">): event is GenericMessageEvent => {
+export async function getReplies({
+  client,
+  event,
+  context,
+}: {
+  client: App["client"];
+  event: GenericMessageEvent | AppMentionEvent | KnownEventFromType<"message">;
+  context: Context;
+}): Promise<Message[] | null> {
+  const { channel, thread_ts, ts } = event as GenericMessageEvent;
+  const threadTimestamp = thread_ts ?? ts;
+
+  const users = getUsers(context);
+
+  const replies = await client.conversations.replies({
+    channel,
+    ts: threadTimestamp,
+    inclusive: true,
+  });
+
+  if (replies?.messages) {
+    const summary = replies.messages.map((v) => {
+      const userId = v?.user ?? "";
+      return {
+        user: users?.[userId] ?? userId,
+        text: v.text,
+        ts: v.ts,
+      };
+    });
+    return summary;
+  }
+
+  return null;
+}
+
+export function isGenericMessageEvent(event: KnownEventFromType<"message">): event is GenericMessageEvent {
   return event.channel_type === "im";
-};
+}

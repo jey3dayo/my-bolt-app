@@ -13,7 +13,7 @@
     "build": "run-s build:compile",
     "build:compile": "tsup",
     "start": "node build/server.js",
-    "dev": "tsup src/server.ts --watch",
+    "dev": "tsup src/server.ts --watch --onSuccess 'node build/server.js'",
     "lint": "run-s lint:eslint lint:prettier",
     "lint:eslint": "eslint ./src",
     "lint:prettier": "prettier --check --ignore-path .prettierignore './**/*.ts'",
@@ -34,9 +34,12 @@
   "author": "jey3dayo",
   "license": "MIT",
   "dependencies": {
+    "@langchain/core": "^0.1.61",
+    "@langchain/openai": "^0.0.28",
     "@slack/bolt": "^3.18.0",
     "@t3-oss/env-core": "^0.10.1",
     "chatgpt": "^5.2.5",
+    "langchain": "^0.1.36",
     "zod": "^3.23.5"
   },
   "devDependencies": {
