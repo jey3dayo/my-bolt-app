@@ -38,3 +38,7 @@ export async function getResponse(stream: IterableReadableStream<string>) {
 
   return text;
 }
+
+export function getEmotion(text: string) {
+  return ["smile"];
+}
