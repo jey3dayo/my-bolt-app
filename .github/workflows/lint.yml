@@ -21,9 +21,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: 'package.json'
-      - name: Install Yarn v4
-        run: |
-          yarn set version berry
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.x.x
+          run_install: false
       - name: Get pnpm store directory
         id: pnpm-cache
         run: |
