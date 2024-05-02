@@ -16,22 +16,23 @@ async function keywordCallback({
 
     try {
       // LLM で絵文字リストを取得する
-      const stream = await getEmotion(messages);
+      const stream = await getEmotion(messages, logger);
       const response = await getResponse(stream);
       const emotions = response?.split(",") ?? [];
 
+      logger.info(emotions);
       for (const emotion of emotions) {
         // 失敗するの前提でtry-catchする
-        try {
-          // 返信メッセージにリアクションを付ける
-          await client.reactions.add({
+        // 返信メッセージにリアクションを付ける
+        await client.reactions
+          .add({
             channel: event.channel,
             timestamp: event.ts,
             name: emotion,
+          })
+          .catch((_) => {
+            logger.info("Failed to add reaction:", emotion);
           });
-        } catch (e) {
-          logger.info("Failed to add reaction:", emotion);
-        }
       }
     } catch (e) {
       logger.error("Failed to get emotions:", e);

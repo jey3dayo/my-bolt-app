@@ -21,7 +21,7 @@ const appMentionCallback = async ({
     const messages = await getReplies({ client, event, context });
     if (!messages) return;
 
-    const stream = await chatStream(messages);
+    const stream = await chatStream(messages, logger);
     const responseText = await getResponse(stream);
     if (!responseText) return;
 

@@ -11,7 +11,7 @@ const chatModel = new ChatOpenAI({
 
 const parser = new StringOutputParser();
 
-export async function chatStream(threadMessages: Message[]) {
+export async function chatStream(threadMessages: Message[], logger: any) {
   try {
     const messages = [templateMessage];
 
@@ -22,7 +22,7 @@ export async function chatStream(threadMessages: Message[]) {
 
     return chatModel.pipe(parser).stream(messages);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     throw new Error("Error generating content stream");
   }
 }
@@ -39,7 +39,7 @@ export async function getResponse(stream: IterableReadableStream<string>) {
   return text;
 }
 
-export async function getEmotion(threadMessages: Message[]) {
+export async function getEmotion(threadMessages: Message[], logger: any) {
   try {
     const messages = [templateEmotionMessage];
 
@@ -50,7 +50,7 @@ export async function getEmotion(threadMessages: Message[]) {
 
     return chatModel.pipe(parser).stream(messages);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     throw new Error("Error generating content stream");
   }
 }
