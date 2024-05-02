@@ -20,7 +20,6 @@ async function keywordCallback({
       const response = await getResponse(stream);
       const emotions = response?.split(",") ?? [];
 
-      logger.info(emotions);
       for (const emotion of emotions) {
         // 失敗するの前提でtry-catchする
         // 返信メッセージにリアクションを付ける
@@ -35,7 +34,7 @@ async function keywordCallback({
           });
       }
     } catch (e) {
-      logger.error("Failed to get emotions:", e);
+      logger.error(`Failed to get emotions: ${e.message}`, { error: e });
     }
   } catch (error) {
     logger.error(error);
