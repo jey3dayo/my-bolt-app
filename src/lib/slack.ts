@@ -21,7 +21,7 @@ export function getSlackApp() {
     token: env.SLACK_BOT_TOKEN,
     signingSecret: env.SLACK_SIGNING_SECRET,
     appToken: env.SLACK_APP_TOKEN,
-    port: Number(env.PORT || 3000),
+    port: parseInt(env.PORT, 10) || 3000,
     socketMode: true,
     logLevel: LogLevel.INFO,
   });
@@ -31,9 +31,9 @@ function getUsers(context: Context): Users {
   const { botId, botUserId, userId } = context;
   const users: Users = {};
 
-  if (botId) users[botId] = "system";
-  if (botUserId) users[botUserId] = "system";
-  if (userId) users[userId] = "user";
+  if (botId) users[botId] = BOT_USER;
+  if (botUserId) users[botUserId] = BOT_USER;
+  if (userId) users[userId] = USER;
 
   return users;
 }
