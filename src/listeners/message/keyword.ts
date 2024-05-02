@@ -29,7 +29,7 @@ async function keywordCallback({
           name: emotion,
         })
         .catch(() => {
-          logger.info("Failed to add reaction:", emotion);
+          logger.info(`Failed to add reaction: ${emotion}`);
         });
     }
   } catch (error) {
