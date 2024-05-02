@@ -29,10 +29,8 @@ export async function chatStream(threadMessages: Message[], logger: any) {
 
 export async function getResponse(stream: IterableReadableStream<string>) {
   let text = "";
-  let chunkCount = 0;
   for await (const chunk of stream) {
     text += chunk;
-    chunkCount++;
   }
   if (!text) return;
 

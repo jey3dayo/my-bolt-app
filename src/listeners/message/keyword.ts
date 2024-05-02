@@ -30,7 +30,7 @@ async function keywordCallback({
             timestamp: event.ts,
             name: emotion,
           })
-          .catch((_) => {
+          .catch(() => {
             logger.info("Failed to add reaction:", emotion);
           });
       }
