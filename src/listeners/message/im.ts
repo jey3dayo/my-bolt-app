@@ -1,6 +1,6 @@
 import { AllMiddlewareArgs, GenericMessageEvent, SlackEventMiddlewareArgs } from "@slack/bolt";
 import { getReplies } from "../../lib/slack";
-import { chatStream, getResponse } from "../../llms/openai";
+import { generateChatStream, getResponse } from "../../llms/openai";
 
 const IM_CHANNEL_TYPE = "im";
 
@@ -18,7 +18,7 @@ async function imCallback({
     const messages = await getReplies({ client, event, context });
     if (!messages) return;
 
-    const stream = await chatStream(messages, logger);
+    const stream = await generateChatStream(messages, logger);
     const responseText = await getResponse(stream);
     if (!responseText) return;
 

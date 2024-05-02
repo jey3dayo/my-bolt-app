@@ -1,6 +1,6 @@
 import { AllMiddlewareArgs, SlackEventMiddlewareArgs } from "@slack/bolt";
 import { getReplies } from "../../lib/slack";
-import { chatStream, getResponse } from "../../llms/openai";
+import { generateChatStream, getResponse } from "../../llms/openai";
 
 export interface AppMentionEventWithFiles extends SlackEventMiddlewareArgs<"app_mention"> {
   event: SlackEventMiddlewareArgs<"app_mention">["payload"] & {
@@ -21,7 +21,7 @@ const appMentionCallback = async ({
     const messages = await getReplies({ client, event, context });
     if (!messages) return;
 
-    const stream = await chatStream(messages, logger);
+    const stream = await generateChatStream(messages, logger);
     const responseText = await getResponse(stream);
     if (!responseText) return;
 

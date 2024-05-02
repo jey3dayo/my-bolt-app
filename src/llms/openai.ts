@@ -4,6 +4,7 @@ import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { IterableReadableStream } from "@langchain/core/utils/stream";
 import type { Message } from "../lib/slack";
 import { templateMessage, defaultModel, BOT_USER, templateEmotionMessage } from "../constants";
+import { BaseLanguageModelInput } from "@langchain/core/language_models/base";
 
 const chatModel = new ChatOpenAI({
   modelName: defaultModel,
@@ -11,7 +12,11 @@ const chatModel = new ChatOpenAI({
 
 const parser = new StringOutputParser();
 
-export async function chatStream(threadMessages: Message[], logger: any) {
+export function createChatStream(messages: BaseLanguageModelInput) {
+  return chatModel.pipe(parser).stream(messages);
+}
+
+export async function generateChatStream(threadMessages: Message[], logger: any) {
   try {
     const messages = [templateMessage];
 
@@ -20,7 +25,7 @@ export async function chatStream(threadMessages: Message[], logger: any) {
       messages.push(message.user === BOT_USER ? new AIMessage(message.text) : new HumanMessage(message.text));
     });
 
-    return chatModel.pipe(parser).stream(messages);
+    return createChatStream(messages);
   } catch (error) {
     logger.error(error);
     throw new Error("Error generating content stream");
