@@ -54,6 +54,6 @@ export async function getEmotion(threadMessages: Message[], logger: any) {
     return chatModel.pipe(parser).stream(messages);
   } catch (error) {
     logger.error(error);
-    throw new Error("Error generating content stream");
+    throw new Error(`Error generating content stream: ${error.message}`);
   }
 }
