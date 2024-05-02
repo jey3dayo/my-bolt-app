@@ -8,7 +8,7 @@ const sampleMessageCallback = async ({
   logger.info("[sample-message]");
 
   try {
-    const greeting = context.matches[0];
+    const greeting = context.matches?.[0] ?? "Hello";
     await say(`${greeting}, how are you?`);
   } catch (error) {
     logger.error(error);
