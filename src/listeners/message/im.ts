@@ -2,6 +2,8 @@ import { AllMiddlewareArgs, GenericMessageEvent, SlackEventMiddlewareArgs } from
 import { getReplies } from "../../lib/slack";
 import { chatStream, getResponse } from "../../llms/openai";
 
+const IM_CHANNEL_TYPE = "im";
+
 async function imCallback({
   client,
   event,
@@ -9,7 +11,7 @@ async function imCallback({
   context,
   logger,
 }: AllMiddlewareArgs & SlackEventMiddlewareArgs<"message">) {
-  if (event.channel_type !== "im") return;
+  if (event.channel_type !== IM_CHANNEL_TYPE) return;
   logger.info("[IM]");
 
   try {
