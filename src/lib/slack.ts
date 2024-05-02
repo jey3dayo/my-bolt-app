@@ -58,7 +58,7 @@ export async function getReplies({
     inclusive: true,
   });
 
-  if (replies?.messages) {
+  if (replies && replies?.messages) {
     const summary = replies.messages.map((v) => {
       const userId = v?.user ?? "";
       return {
