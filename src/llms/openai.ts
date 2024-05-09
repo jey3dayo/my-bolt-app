@@ -4,7 +4,14 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { IterableReadableStream } from "@langchain/core/utils/stream";
 import type { Message } from "../lib/slack";
-import { templateMessage, defaultModel, defaultImageModel, BOT_USER, templateEmotionMessage } from "../constants";
+import {
+  templateMessage,
+  defaultModel,
+  defaultImageModel,
+  BOT_USER,
+  templateEmotionMessage,
+  IMAGE_SIZE,
+} from "../constants";
 import { BaseLanguageModelInput } from "@langchain/core/language_models/base";
 
 const chatModel = new ChatOpenAI({
@@ -65,7 +72,7 @@ export async function generateImage(prompt: string, logger: any): Promise<string
   const options: OpenAI.Images.ImageGenerateParams = {
     model: defaultImageModel,
     prompt,
-    size: "1024x1024",
+    size: IMAGE_SIZE,
   };
 
   try {

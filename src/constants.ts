@@ -8,6 +8,8 @@ export const defaultModel = env.DEFAULT_MODEL;
 export const extraModel = env.EXTRA_MODEL;
 export const defaultImageModel = env.IMAGE_MODEL;
 
+export const IMAGE_SIZE = "1024x1024";
+
 const initializeMessage = "あなたは日本企業で利用されるSlackから様々な質問を受けるアシスタントです。";
 
 export const templateMessage = new SystemMessage(
