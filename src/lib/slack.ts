@@ -100,6 +100,6 @@ export function isGenericMessageEvent(event: KnownEventFromType<"message">): eve
   return event.channel_type === "im";
 }
 
-export function createErrorMessage(message: string) {
-  return `エラーが発生しました\n message: ${message}`;
+export function createErrorMessage(error: Error) {
+  return `エラーが発生しました\n message: ${error.message}\n stack: ${error.stack}`;
 }

@@ -33,7 +33,7 @@ const appMentionCallback = async ({
     });
   } catch (error) {
     logger.error(error);
-    await say(createErrorMessage(error.message));
+    await say(createErrorMessage(error));
   }
 };
 

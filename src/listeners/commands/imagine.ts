@@ -24,7 +24,7 @@ async function imagineCallback({
     await postImageToSlack({ client, prompt, imageUrl, channel });
   } catch (error) {
     logger.error(error);
-    await say(createErrorMessage(error.message));
+    await say(createErrorMessage(error));
   }
 }
 

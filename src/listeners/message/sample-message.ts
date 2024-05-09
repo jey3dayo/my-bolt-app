@@ -13,7 +13,7 @@ const sampleMessageCallback = async ({
     await say(`${greeting}, how are you?`);
   } catch (error) {
     logger.error(error);
-    await say(createErrorMessage(error.message));
+    await say(createErrorMessage(error));
   }
 };
 
