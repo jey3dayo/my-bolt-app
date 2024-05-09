@@ -14,7 +14,11 @@ async function imagineCallback({
 
   try {
     const { text: prompt, channel_id: channel } = command;
-    if (!prompt) return;
+    if (!prompt) {
+      await ack();
+      await say("プロンプトが空です。入力してください。");
+      return;
+    }
 
     const imageUrl = await generateImage(prompt, logger);
     if (!imageUrl) {
