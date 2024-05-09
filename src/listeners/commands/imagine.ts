@@ -17,6 +17,10 @@ async function imagineCallback({
     if (!prompt) return;
 
     const imageUrl = await generateImage(prompt, logger);
+    if (!imageUrl) {
+      throw new Error("Image URL is not found");
+    }
+
     await postImageToSlack({ client, prompt, imageUrl, channel });
   } catch (error) {
     logger.error(error);

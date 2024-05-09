@@ -74,15 +74,11 @@ export async function getReplies({ client, event, context }: getRepliesArgs): Pr
 type PostImageToSlackArgs = {
   client: App["client"];
   prompt: string;
-  imageUrl: string | undefined;
+  imageUrl: string;
   channel: string;
 };
 
 export async function postImageToSlack({ client, prompt, imageUrl, channel }: PostImageToSlackArgs): Promise<void> {
-  if (!imageUrl) {
-    throw new Error("Image URL is not found");
-  }
-
   await client.chat.postMessage({
     channel,
     text: prompt,
