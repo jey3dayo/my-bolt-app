@@ -1,6 +1,6 @@
 import { AllMiddlewareArgs, SlackCommandMiddlewareArgs } from "@slack/bolt";
 import { generateImage } from "../../llms/openai";
-import { postImageToSlack } from "../../lib/slack";
+import { createErrorMessage, postImageToSlack } from "../../lib/slack";
 
 async function imagineCallback({
   client,
@@ -20,7 +20,7 @@ async function imagineCallback({
     await postImageToSlack({ client, prompt, imageUrl, channel });
   } catch (error) {
     logger.error(error);
-    await say("エラーが発生しました。");
+    await say(createErrorMessage(error.message));
   }
 }
 

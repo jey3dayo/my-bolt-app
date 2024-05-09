@@ -79,7 +79,9 @@ type PostImageToSlackArgs = {
 };
 
 export async function postImageToSlack({ client, prompt, imageUrl, channel }: PostImageToSlackArgs): Promise<void> {
-  if (!imageUrl) return;
+  if (!imageUrl) {
+    throw new Error("Image URL is not found");
+  }
 
   await client.chat.postMessage({
     channel,
@@ -100,4 +102,8 @@ export async function postImageToSlack({ client, prompt, imageUrl, channel }: Po
 
 export function isGenericMessageEvent(event: KnownEventFromType<"message">): event is GenericMessageEvent {
   return event.channel_type === "im";
+}
+
+export function createErrorMessage(message: string) {
+  return `エラーが発生しました\n message: ${message}`;
 }
