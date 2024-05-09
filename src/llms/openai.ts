@@ -68,21 +68,19 @@ export async function getEmotion(threadMessages: Message[], logger: any) {
   }
 }
 
-export async function generateImage(prompt: string, logger: any): Promise<string> {
+export async function generateImages(prompt: string, n: number = 1, logger: any): Promise<string[]> {
   const options: OpenAI.Images.ImageGenerateParams = {
     model: defaultImageModel,
     prompt,
     size: IMAGE_SIZE,
+    n: n,
   };
 
   try {
-    const {
-      data: [{ url }],
-    } = await llmClient.images.generate(options);
-
-    logger.info("Generated image URL:", url);
-
-    return url!;
+    const { data } = await llmClient.images.generate(options);
+    if (!data) throw new Error("Failed images generate");
+    logger.info("Generated image URL:", data[0].url);
+    return data.map((v) => v.url!);
   } catch (error) {
     logger.error("Error generating image:", error);
     throw error;

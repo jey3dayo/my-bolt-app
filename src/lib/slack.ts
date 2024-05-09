@@ -74,29 +74,37 @@ export async function getReplies({ client, event, context }: getRepliesArgs): Pr
 type PostImageToSlackArgs = {
   client: App["client"];
   prompt: string;
-  imageUrl: string;
+  imageUrls: string[];
   channel: string;
-  ts: string;
+  ts: string | undefined;
 };
 
-export async function postImageToSlack({ client, ts, prompt, imageUrl, channel }: PostImageToSlackArgs): Promise<void> {
-  // await client.chat.postMessage({
-  await client.chat.update({
+export async function postImageToSlack({
+  client,
+  ts,
+  prompt,
+  imageUrls,
+  channel,
+}: PostImageToSlackArgs): Promise<void> {
+  const args = {
     channel: channel,
-    ts,
     text: prompt,
-    blocks: [
-      {
-        type: "image",
-        title: {
-          type: "plain_text",
-          text: prompt,
-        },
-        image_url: imageUrl,
-        alt_text: prompt,
+    blocks: imageUrls.map((imageUrl) => ({
+      type: "image",
+      title: {
+        type: "plain_text",
+        text: prompt,
       },
-    ],
-  });
+      image_url: imageUrl,
+      alt_text: prompt,
+    })),
+  };
+
+  if (ts) {
+    await client.chat.update({ ts, ...args });
+  } else {
+    await client.chat.postMessage(args);
+  }
 }
 
 export function isGenericMessageEvent(event: KnownEventFromType<"message">): event is GenericMessageEvent {
