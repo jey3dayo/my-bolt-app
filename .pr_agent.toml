@@ -57,7 +57,7 @@ extra_instructions = """\
 """
 
 [pr_update_changelog]
-push_changelog_changes = false
+push_changelog_changes = true
 extra_instructions = """\
 - 必ず日本語で回答してください
 - 以下の原則に従ってコメントしてください。
