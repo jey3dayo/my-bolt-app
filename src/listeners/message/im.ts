@@ -1,5 +1,5 @@
 import { AllMiddlewareArgs, GenericMessageEvent, SlackEventMiddlewareArgs } from "@slack/bolt";
-import { getReplies } from "../../lib/slack";
+import { createErrorMessage, getReplies } from "../../lib/slack";
 import { generateChatStream, getResponse } from "../../llms/openai";
 
 const IM_CHANNEL_TYPE = "im";
@@ -30,6 +30,7 @@ async function imCallback({
     });
   } catch (error) {
     logger.error(error);
+    await say(createErrorMessage(error.message));
   }
 }
 

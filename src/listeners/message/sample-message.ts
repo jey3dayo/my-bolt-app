@@ -1,4 +1,5 @@
 import { AllMiddlewareArgs, SlackEventMiddlewareArgs } from "@slack/bolt";
+import { createErrorMessage } from "../../lib/slack";
 
 const sampleMessageCallback = async ({
   context,
@@ -12,6 +13,7 @@ const sampleMessageCallback = async ({
     await say(`${greeting}, how are you?`);
   } catch (error) {
     logger.error(error);
+    await say(createErrorMessage(error.message));
   }
 };
 
