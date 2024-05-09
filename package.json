@@ -12,8 +12,8 @@
   "scripts": {
     "build": "run-s build:compile",
     "build:compile": "tsup",
-    "start": "node build/server.js",
-    "dev": "tsup src/server.ts --watch --onSuccess 'node build/server.js'",
+    "start": "node dist/server.js",
+    "dev": "tsup src/server.ts --watch --onSuccess 'node dist/server.js'",
     "lint": "run-s lint:eslint lint:prettier",
     "lint:eslint": "eslint ./src",
     "lint:prettier": "prettier --check --ignore-path .prettierignore './**/*.ts'",
