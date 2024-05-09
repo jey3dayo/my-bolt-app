@@ -1,5 +1,5 @@
 import { AllMiddlewareArgs, SlackEventMiddlewareArgs } from "@slack/bolt";
-import { getReplies } from "../../lib/slack";
+import { createErrorMessage, getReplies } from "../../lib/slack";
 import { generateChatStream, getResponse } from "../../llms/openai";
 
 export interface AppMentionEventWithFiles extends SlackEventMiddlewareArgs<"app_mention"> {
@@ -33,6 +33,7 @@ const appMentionCallback = async ({
     });
   } catch (error) {
     logger.error(error);
+    await say(createErrorMessage(error));
   }
 };
 

@@ -3,7 +3,7 @@ model = "gpt-4-turbo"
 enable_custom_labels = true
 
 [pr_reviewer]
-num_code_suggestions = 4
+num_code_suggestions = 5
 inline_code_comments = true
 remove_previous_review_comment = true
 enable_auto_approval = true
@@ -14,11 +14,11 @@ extra_instructions = """\
   - 置換でいじってはいけない
   - オブジェクトまたはライブラリを使ってください
   - 利用技術
-    - Python v3.12
+    - TypeScript
+    - Node.js
     - OpenAI API
     - langchain
     - Bolt
-    - ruff
 """
 
 
@@ -41,7 +41,7 @@ extra_instructions = """\
 
 [pr_code_suggestions]
 summarize = true
-num_code_suggestions = 4
+num_code_suggestions = 5
 extra_instructions = """\
 - 必ず日本語で回答してください
 - 以下の原則に従ってコメントしてください。
@@ -49,15 +49,15 @@ extra_instructions = """\
   - 置換でいじってはいけない
   - オブジェクトまたはライブラリを使ってください
   - 利用技術
-    - Python v3.12
+    - TypeScript
+    - Node.js
     - OpenAI API
     - langchain
     - Bolt
-    - ruff
 """
 
 [pr_update_changelog]
-push_changelog_changes = false
+push_changelog_changes = true
 extra_instructions = """\
 - 必ず日本語で回答してください
 - 以下の原則に従ってコメントしてください。
@@ -65,11 +65,11 @@ extra_instructions = """\
   - 置換でいじってはいけない
   - オブジェクトまたはライブラリを使ってください
   - 利用技術
-    - Python v3.12
+    - TypeScript
+    - Node.js
     - OpenAI API
     - langchain
     - Bolt
-    - ruff
 """
 
 [github_action_config]

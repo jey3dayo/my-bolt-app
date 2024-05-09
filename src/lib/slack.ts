@@ -38,15 +38,13 @@ function getUsers(context: Context): Users {
   return users;
 }
 
-export async function getReplies({
-  client,
-  event,
-  context,
-}: {
+type getRepliesArgs = {
   client: App["client"];
   event: GenericMessageEvent | AppMentionEvent | KnownEventFromType<"message">;
   context: Context;
-}): Promise<Message[] | null> {
+};
+
+export async function getReplies({ client, event, context }: getRepliesArgs): Promise<Message[] | null> {
   const { channel, thread_ts, ts } = event as GenericMessageEvent;
   const threadTimestamp = thread_ts ?? ts;
 
@@ -73,6 +71,38 @@ export async function getReplies({
   return null;
 }
 
+type PostImageToSlackArgs = {
+  client: App["client"];
+  prompt: string;
+  imageUrl: string;
+  channel: string;
+  ts: string;
+};
+
+export async function postImageToSlack({ client, ts, prompt, imageUrl, channel }: PostImageToSlackArgs): Promise<void> {
+  // await client.chat.postMessage({
+  await client.chat.update({
+    channel: channel,
+    ts,
+    text: prompt,
+    blocks: [
+      {
+        type: "image",
+        title: {
+          type: "plain_text",
+          text: prompt,
+        },
+        image_url: new URL(imageUrl).toString(),
+        alt_text: prompt,
+      },
+    ],
+  });
+}
+
 export function isGenericMessageEvent(event: KnownEventFromType<"message">): event is GenericMessageEvent {
   return event.channel_type === "im";
+}
+
+export function createErrorMessage(error: Error) {
+  return ["エラーが発生しました", `message: ${error.message}`, `stack: ${error.stack}`].join("\n");
 }

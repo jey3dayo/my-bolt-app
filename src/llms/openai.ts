@@ -1,14 +1,24 @@
+import { OpenAI } from "openai";
 import { ChatOpenAI } from "@langchain/openai";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { IterableReadableStream } from "@langchain/core/utils/stream";
 import type { Message } from "../lib/slack";
-import { templateMessage, defaultModel, BOT_USER, templateEmotionMessage } from "../constants";
+import {
+  templateSystemMessage,
+  defaultModel,
+  defaultImageModel,
+  BOT_USER,
+  templateEmotionMessage,
+  IMAGE_SIZE,
+} from "../constants";
 import { BaseLanguageModelInput } from "@langchain/core/language_models/base";
 
 const chatModel = new ChatOpenAI({
   modelName: defaultModel,
 });
+
+const llmClient = new OpenAI();
 
 const parser = new StringOutputParser();
 
@@ -18,7 +28,7 @@ export function createChatStream(messages: BaseLanguageModelInput) {
 
 export async function generateChatStream(threadMessages: Message[], logger: any) {
   try {
-    const messages = [templateMessage];
+    const messages = [templateSystemMessage];
 
     threadMessages?.forEach((message) => {
       if (!message.text) return;
@@ -55,5 +65,26 @@ export async function getEmotion(threadMessages: Message[], logger: any) {
   } catch (error) {
     logger.error(error);
     throw new Error(`Error generating content stream: ${error.message}`);
+  }
+}
+
+export async function generateImage(prompt: string, logger: any): Promise<string> {
+  const options: OpenAI.Images.ImageGenerateParams = {
+    model: defaultImageModel,
+    prompt,
+    size: IMAGE_SIZE,
+  };
+
+  try {
+    const {
+      data: [{ url }],
+    } = await llmClient.images.generate(options);
+
+    logger.info("Generated image URL:", url);
+
+    return url!;
+  } catch (error) {
+    logger.error("Error generating image:", error);
+    throw error;
   }
 }

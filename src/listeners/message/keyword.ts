@@ -1,10 +1,11 @@
 import { AllMiddlewareArgs, SlackEventMiddlewareArgs } from "@slack/bolt";
-import { getReplies } from "../../lib/slack";
+import { createErrorMessage, getReplies } from "../../lib/slack";
 import { getEmotion, getResponse } from "../../llms/openai";
 
 async function keywordCallback({
   client,
   event,
+  say,
   context,
   logger,
 }: AllMiddlewareArgs & SlackEventMiddlewareArgs<"message">) {
@@ -34,6 +35,7 @@ async function keywordCallback({
     }
   } catch (error) {
     logger.error(error);
+    await say(createErrorMessage(error));
   }
 }
 
