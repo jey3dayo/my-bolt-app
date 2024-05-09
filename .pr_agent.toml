@@ -14,11 +14,11 @@ extra_instructions = """\
   - 置換でいじってはいけない
   - オブジェクトまたはライブラリを使ってください
   - 利用技術
-    - Python v3.12
+    - TypeScript
+    - Node.js
     - OpenAI API
     - langchain
     - Bolt
-    - ruff
 """
 
 
@@ -49,11 +49,11 @@ extra_instructions = """\
   - 置換でいじってはいけない
   - オブジェクトまたはライブラリを使ってください
   - 利用技術
-    - Python v3.12
+    - TypeScript
+    - Node.js
     - OpenAI API
     - langchain
     - Bolt
-    - ruff
 """
 
 [pr_update_changelog]
@@ -65,11 +65,11 @@ extra_instructions = """\
   - 置換でいじってはいけない
   - オブジェクトまたはライブラリを使ってください
   - 利用技術
-    - Python v3.12
+    - TypeScript
+    - Node.js
     - OpenAI API
     - langchain
     - Bolt
-    - ruff
 """
 
 [github_action_config]
