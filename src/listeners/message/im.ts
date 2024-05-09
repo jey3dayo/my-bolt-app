@@ -3,6 +3,7 @@ import { createErrorMessage, getReplies } from "../../lib/slack";
 import { generateChatStream, getResponse } from "../../llms/openai";
 
 const IM_CHANNEL_TYPE = "im";
+const SUBTYPE_CHANGED = "message_changed";
 
 async function imCallback({
   client,
@@ -12,6 +13,8 @@ async function imCallback({
   logger,
 }: AllMiddlewareArgs & SlackEventMiddlewareArgs<"message">) {
   if (event.channel_type !== IM_CHANNEL_TYPE) return;
+  if ([SUBTYPE_CHANGED].includes(event?.subtype ?? "")) return;
+
   logger.info("[IM]");
 
   try {
