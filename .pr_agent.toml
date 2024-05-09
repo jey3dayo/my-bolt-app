@@ -41,7 +41,7 @@ extra_instructions = """\
 
 [pr_code_suggestions]
 summarize = true
-num_code_suggestions = 4
+num_code_suggestions = 5
 extra_instructions = """\
 - 必ず日本語で回答してください
 - 以下の原則に従ってコメントしてください。
