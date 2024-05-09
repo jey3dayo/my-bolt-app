@@ -76,11 +76,14 @@ type PostImageToSlackArgs = {
   prompt: string;
   imageUrl: string;
   channel: string;
+  ts: string;
 };
 
-export async function postImageToSlack({ client, prompt, imageUrl, channel }: PostImageToSlackArgs): Promise<void> {
-  await client.chat.postMessage({
-    channel,
+export async function postImageToSlack({ client, ts, prompt, imageUrl, channel }: PostImageToSlackArgs): Promise<void> {
+  // await client.chat.postMessage({
+  await client.chat.update({
+    channel: channel,
+    ts,
     text: prompt,
     blocks: [
       {

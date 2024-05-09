@@ -16,17 +16,19 @@ async function imagineCallback({
   try {
     const { text: prompt, channel_id: channel } = command;
     if (!prompt) {
-      await ack();
       await say("プロンプトが空です。入力してください。");
       return;
     }
+
+    const event = await say(templateMessage.generating);
+    const ts = event.ts!;
 
     const imageUrl = await generateImage(prompt, logger);
     if (!imageUrl) {
       throw new Error("Image URL is not found");
     }
 
-    await postImageToSlack({ client, prompt, imageUrl, channel });
+    await postImageToSlack({ client, prompt, imageUrl, channel, ts });
   } catch (error) {
     logger.error(error);
     await say(createErrorMessage(error));
