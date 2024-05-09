@@ -92,7 +92,7 @@ export async function postImageToSlack({ client, ts, prompt, imageUrl, channel }
           type: "plain_text",
           text: prompt,
         },
-        image_url: new URL(imageUrl).toString(),
+        image_url: imageUrl,
         alt_text: prompt,
       },
     ],
