@@ -12,10 +12,14 @@ export const IMAGE_SIZE = "1024x1024";
 
 const initializeMessage = "あなたは日本企業で利用されるSlackから様々な質問を受けるアシスタントです。";
 
-export const templateMessage = new SystemMessage(
+export const templateSystemMessage = new SystemMessage(
   `${initializeMessage}回答はSlackに投稿されるため、Slackで表示する時に見やすいフォーマットで返答してください。`,
 );
 
 export const templateEmotionMessage = new SystemMessage(
   `${initializeMessage}発言に応じてslackのemotionを重複せず複数返します。 例: thumbsup,beers,dancer`,
 );
+
+export const templateMessage = {
+  generating: "生成中・・・",
+};

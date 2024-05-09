@@ -1,6 +1,7 @@
 import { AllMiddlewareArgs, SlackCommandMiddlewareArgs } from "@slack/bolt";
 import { generateImage } from "../../llms/openai";
 import { createErrorMessage, postImageToSlack } from "../../lib/slack";
+import { templateMessage } from "../../constants";
 
 async function imagineCallback({
   client,

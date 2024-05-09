@@ -5,7 +5,7 @@ import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { IterableReadableStream } from "@langchain/core/utils/stream";
 import type { Message } from "../lib/slack";
 import {
-  templateMessage,
+  templateSystemMessage,
   defaultModel,
   defaultImageModel,
   BOT_USER,
@@ -28,7 +28,7 @@ export function createChatStream(messages: BaseLanguageModelInput) {
 
 export async function generateChatStream(threadMessages: Message[], logger: any) {
   try {
-    const messages = [templateMessage];
+    const messages = [templateSystemMessage];
 
     threadMessages?.forEach((message) => {
       if (!message.text) return;
