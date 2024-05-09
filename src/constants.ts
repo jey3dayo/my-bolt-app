@@ -6,6 +6,7 @@ export const USER = "user";
 
 export const defaultModel = env.DEFAULT_MODEL;
 export const extraModel = env.EXTRA_MODEL;
+export const defaultImageModel = env.IMAGE_MODEL;
 
 const initializeMessage = "あなたは日本企業で利用されるSlackから様々な質問を受けるアシスタントです。";
 

@@ -38,15 +38,13 @@ function getUsers(context: Context): Users {
   return users;
 }
 
-export async function getReplies({
-  client,
-  event,
-  context,
-}: {
+type getRepliesArgs = {
   client: App["client"];
   event: GenericMessageEvent | AppMentionEvent | KnownEventFromType<"message">;
   context: Context;
-}): Promise<Message[] | null> {
+};
+
+export async function getReplies({ client, event, context }: getRepliesArgs): Promise<Message[] | null> {
   const { channel, thread_ts, ts } = event as GenericMessageEvent;
   const threadTimestamp = thread_ts ?? ts;
 
@@ -71,6 +69,33 @@ export async function getReplies({
   }
 
   return null;
+}
+
+type PostImageToSlackArgs = {
+  client: App["client"];
+  prompt: string;
+  imageUrl: string | undefined;
+  channel: string;
+};
+
+export async function postImageToSlack({ client, prompt, imageUrl, channel }: PostImageToSlackArgs): Promise<void> {
+  if (!imageUrl) return;
+
+  await client.chat.postMessage({
+    channel,
+    text: prompt,
+    blocks: [
+      {
+        type: "image",
+        title: {
+          type: "plain_text",
+          text: prompt,
+        },
+        image_url: imageUrl,
+        alt_text: prompt,
+      },
+    ],
+  });
 }
 
 export function isGenericMessageEvent(event: KnownEventFromType<"message">): event is GenericMessageEvent {
