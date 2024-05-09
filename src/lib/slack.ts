@@ -104,5 +104,5 @@ export function isGenericMessageEvent(event: KnownEventFromType<"message">): eve
 }
 
 export function createErrorMessage(error: Error) {
-  return `エラーが発生しました\n message: ${error.message}\n stack: ${error.stack}`;
+  return ["エラーが発生しました", `message: ${error.message}`, `stack: ${error.stack}`].join("\n");
 }
