@@ -1,7 +1,9 @@
 import { App } from "@slack/bolt";
+import testCallback from "./test";
 import imagineCallback from "./imagine";
 
 function register(app: App) {
+  app.command("/test", testCallback);
   app.command("/imagine", imagineCallback);
 }
 

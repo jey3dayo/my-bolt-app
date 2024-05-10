@@ -1,3 +1,4 @@
+import util from "util";
 import slackBolt, { LogLevel } from "@slack/bolt";
 import type { App, Context, GenericMessageEvent, AppMentionEvent, KnownEventFromType } from "@slack/bolt";
 import { env } from "../env";
@@ -113,4 +114,8 @@ export function isGenericMessageEvent(event: KnownEventFromType<"message">): eve
 
 export function createErrorMessage(error: Error) {
   return ["エラーが発生しました", `message: ${error.message}`, `stack: ${error.stack}`].join("\n");
+}
+
+export function beautifyJSON(json: unknown) {
+  return util.inspect(json, { depth: null });
 }
