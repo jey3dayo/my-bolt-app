@@ -1,3 +1,4 @@
+import util from "util";
 import slackBolt, { LogLevel } from "@slack/bolt";
 import type { App, Context, GenericMessageEvent, AppMentionEvent, KnownEventFromType } from "@slack/bolt";
 import { env } from "../env";
@@ -71,6 +72,21 @@ export async function getReplies({ client, event, context }: getRepliesArgs): Pr
   return null;
 }
 
+type getHistoryArgs = {
+  client: App["client"];
+  event: KnownEventFromType<"reaction_added">;
+};
+
+export async function getHistory({ client, event }: getHistoryArgs): Promise<string[] | undefined | null> {
+  const history = await client.conversations.history({
+    channel: event.item.channel,
+    latest: event.item.ts,
+    inclusive: true,
+    limit: 1,
+  });
+  return history ? history?.messages?.map((v) => v.text!).filter((v) => !!v) : null;
+}
+
 type PostImageToSlackArgs = {
   client: App["client"];
   prompt: string;
@@ -113,4 +129,8 @@ export function isGenericMessageEvent(event: KnownEventFromType<"message">): eve
 
 export function createErrorMessage(error: Error) {
   return ["エラーが発生しました", `message: ${error.message}`, `stack: ${error.stack}`].join("\n");
+}
+
+export function beautifyJSON(json: unknown) {
+  return util.inspect(json, { depth: null });
 }
