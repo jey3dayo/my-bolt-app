@@ -1,7 +1,7 @@
 import { SystemMessage } from "@langchain/core/messages";
 import { env } from "./env";
 
-export const debug = env.DEBUG === "true";
+export const debug = Boolean(env.DEBUG);
 
 export const BOT_USER = "system";
 export const USER = "user";
