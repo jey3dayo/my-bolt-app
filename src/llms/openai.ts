@@ -42,6 +42,19 @@ export async function generateChatStream(threadMessages: Message[], logger: any)
   }
 }
 
+export async function summaryChatStream(text: string, logger: any) {
+  try {
+    const messages = [templateSystemMessage];
+    messages.push(new AIMessage("要約してください"));
+    messages.push(new HumanMessage(text));
+
+    return createChatStream(messages);
+  } catch (error) {
+    logger.error(error);
+    throw new Error("Error generating content stream");
+  }
+}
+
 export async function getResponse(stream: IterableReadableStream<string>) {
   let text = "";
   for await (const chunk of stream) {

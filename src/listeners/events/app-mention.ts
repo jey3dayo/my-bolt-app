@@ -11,8 +11,8 @@ export interface AppMentionEventWithFiles extends SlackEventMiddlewareArgs<"app_
 const appMentionCallback = async ({
   client,
   event,
-  say,
   context,
+  say,
   logger,
 }: AllMiddlewareArgs & AppMentionEventWithFiles) => {
   logger.info("[app_mention]");
