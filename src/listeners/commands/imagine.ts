@@ -11,10 +11,10 @@ async function imagineCallback({
   logger,
 }: AllMiddlewareArgs & SlackCommandMiddlewareArgs): Promise<void> {
   await ack();
-  logger.info("[Imagine Command]");
+  const { text: prompt, channel_id: channel } = command;
+  logger.info(`[${command.command}]`);
 
   try {
-    const { text: prompt, channel_id: channel } = command;
     if (!prompt) {
       await say("プロンプトが空です。入力してください。");
       return;

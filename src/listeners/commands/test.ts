@@ -8,7 +8,7 @@ async function exampleCallback({
   logger,
 }: AllMiddlewareArgs & SlackCommandMiddlewareArgs): Promise<void> {
   await ack();
-  logger.info("[Example Command]");
+  logger.info(`[${command.command}]`);
 
   try {
     const { text: prompt } = command;
