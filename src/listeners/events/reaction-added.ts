@@ -2,8 +2,8 @@ import { AllMiddlewareArgs, SlackEventMiddlewareArgs } from "@slack/bolt";
 import { createErrorMessage, getHistory } from "../../lib/slack";
 import { getResponse, summaryChatStream } from "../../llms/openai";
 
-const targetReactions = ["kirbyrun"];
-const matchRegex = /kirby|youyaku|summary/;
+const targetReactions = ["youyaku"];
+const matchRegex = /youyaku|summary/;
 
 const appMentionCallback = async ({
   client,
