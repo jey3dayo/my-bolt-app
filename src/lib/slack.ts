@@ -1,4 +1,7 @@
+import fs from "fs";
 import util from "util";
+import os from "os";
+import path from "path";
 import slackBolt, { LogLevel } from "@slack/bolt";
 import type { App, Context, GenericMessageEvent, AppMentionEvent, KnownEventFromType } from "@slack/bolt";
 import { env } from "../env";
@@ -102,16 +105,47 @@ export async function postImageToSlack({
   imageUrls,
   channel,
 }: PostImageToSlackArgs): Promise<void> {
+  const uploadedFiles = await Promise.all(
+    imageUrls.map(async (imageUrl) => {
+      const response = await fetch(imageUrl);
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      const tempDir = os.tmpdir();
+      const tempFilePath = path.join(tempDir, `${prompt}.png`);
+      fs.writeFileSync(tempFilePath, buffer);
+
+      const result = await client.files.uploadV2({
+        channel_ids: channel,
+        initial_comment: prompt,
+        file: fs.createReadStream(tempFilePath),
+        // filename: `${prompt}.png`,
+        filename: `test.png`,
+      });
+
+      // 一時ファイルを削除
+      fs.unlinkSync(tempFilePath);
+
+      type ResultFile = { permalink: string };
+      type ResultFiles = { files: ResultFile[] };
+
+      const resultFiles = result.files as ResultFiles[];
+      return resultFiles[0].files[0].permalink;
+    }),
+  );
+
+  console.log({ uploadedFiles });
+
   const args = {
     channel: channel,
     text: prompt,
-    blocks: imageUrls.map((imageUrl) => ({
+    blocks: uploadedFiles.map((permalink) => ({
       type: "image",
       title: {
         type: "plain_text",
         text: prompt,
       },
-      image_url: imageUrl,
+      image_url: permalink,
       alt_text: prompt,
     })),
   };
