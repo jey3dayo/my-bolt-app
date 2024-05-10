@@ -68,7 +68,7 @@ export async function getEmotion(threadMessages: Message[], logger: any) {
   }
 }
 
-export async function generateImages(prompt: string, n: number = 1, logger: any): Promise<string[]> {
+export async function generateImages(prompt: string, n: number, logger: any): Promise<string[]> {
   const options: OpenAI.Images.ImageGenerateParams = {
     model: defaultImageModel,
     prompt,

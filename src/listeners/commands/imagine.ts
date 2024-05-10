@@ -23,7 +23,7 @@ async function imagineCallback({
     const event = await say(templateMessage.generating);
     const ts = event.ts!;
 
-    const n = 1;
+    const n = 1; // n = 1のみ対応
     const imageUrls = await generateImages(prompt, n, logger);
     if (!imageUrls) throw new Error("Image URL is not found");
 
