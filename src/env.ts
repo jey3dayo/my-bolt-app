@@ -12,7 +12,7 @@ export const env = createEnv({
     IMAGE_MODEL: z.string().min(1),
     GPT4_ROOM_ID: z.string().min(1).optional(),
     PORT: z.string().optional(),
-    DEBUG: z.string().optional(),
+    DEBUG_MODE: z.string().optional(),
   },
   runtimeEnv: {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
@@ -24,7 +24,7 @@ export const env = createEnv({
     IMAGE_MODEL: process.env.IMAGE_MODEL,
     GPT4_ROOM_ID: process.env.GPT4_ROOM_ID,
     PORT: process.env.PORT,
-    DEBUG: process.env.DEBUG,
+    DEBUG_MODE: process.env.DEBUG_MODE,
   },
   skipValidation: !!process.env.CI,
 });
