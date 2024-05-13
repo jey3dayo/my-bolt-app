@@ -7,7 +7,7 @@ import type { App, Context, GenericMessageEvent, AppMentionEvent, KnownEventFrom
 import { env } from "../env";
 import { BOT_USER, USER } from "../constants";
 
-export type ChannelType = "dm" | "public_channel" | "private_channel" | "unknown";
+export type ChannelType = "dm" | "public_channel" | "private_channel";
 export type UserType = typeof BOT_USER | typeof USER;
 
 export type Users = {
