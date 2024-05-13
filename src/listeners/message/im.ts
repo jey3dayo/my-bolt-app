@@ -11,10 +11,8 @@ async function imCallback({
   context,
   logger,
 }: AllMiddlewareArgs & SlackEventMiddlewareArgs<"message">) {
-  if (event.channel_type !== IM_CHANNEL_TYPE) return;
-  if ([SUBTYPE_CHANGED].includes(event?.subtype ?? "")) return;
-
-  logger.info("[IM]");
+  logger.info(`[IM]: type:${event.type} subtype:${event.subtype}`);
+  if (event.channel_type !== IM_CHANNEL_TYPE || event?.subtype) return;
 
   try {
     const messages = await getReplies({ client, event, context });
