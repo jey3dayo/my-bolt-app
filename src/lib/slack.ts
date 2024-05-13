@@ -7,14 +7,15 @@ import type { App, Context, GenericMessageEvent, AppMentionEvent, KnownEventFrom
 import { env } from "../env";
 import { BOT_USER, USER } from "../constants";
 
-export type USER_TYPE = typeof BOT_USER | typeof USER;
+export type ChannelType = "dm" | "public_channel" | "private_channel" | "unknown";
+export type UserType = typeof BOT_USER | typeof USER;
 
 export type Users = {
-  [key: string]: USER_TYPE;
+  [key: string]: UserType;
 };
 
 export type Message = {
-  user: USER_TYPE | string;
+  user: UserType | string;
   text: string | undefined;
 };
 
@@ -95,7 +96,6 @@ type PostImageToSlackArgs = {
   prompt: string;
   imageUrls: string[];
   channel: string;
-  ts: string | undefined;
 };
 
 type UploadFiles = {

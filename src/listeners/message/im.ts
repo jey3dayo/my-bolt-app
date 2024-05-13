@@ -3,7 +3,6 @@ import { createErrorMessage, getReplies } from "../../lib/slack";
 import { generateChatStream, getResponse } from "../../llms/openai";
 
 const IM_CHANNEL_TYPE = "im";
-const SUBTYPE_CHANGED = "message_changed";
 
 async function imCallback({
   client,
