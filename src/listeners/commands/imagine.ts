@@ -28,6 +28,9 @@ async function imagineCallback({
     if (!imageUrls) throw new Error("Image URL is not found");
 
     await postImageToSlack({ client, prompt, imageUrls, channel, ts });
+
+    // 投稿を削除
+    await client.chat.delete({ channel, ts });
   } catch (error) {
     logger.error(error);
     await say(createErrorMessage(error));

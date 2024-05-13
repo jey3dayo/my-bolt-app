@@ -1,4 +1,7 @@
+import fs from "fs";
 import util from "util";
+import os from "os";
+import path from "path";
 import slackBolt, { LogLevel } from "@slack/bolt";
 import type { App, Context, GenericMessageEvent, AppMentionEvent, KnownEventFromType } from "@slack/bolt";
 import { env } from "../env";
@@ -95,32 +98,41 @@ type PostImageToSlackArgs = {
   ts: string | undefined;
 };
 
-export async function postImageToSlack({
-  client,
-  ts,
-  prompt,
-  imageUrls,
-  channel,
-}: PostImageToSlackArgs): Promise<void> {
-  const args = {
-    channel: channel,
-    text: prompt,
-    blocks: imageUrls.map((imageUrl) => ({
-      type: "image",
-      title: {
-        type: "plain_text",
-        text: prompt,
-      },
-      image_url: imageUrl,
-      alt_text: prompt,
-    })),
-  };
+type UploadFiles = {
+  files: {
+    id: string;
+    permalink: string;
+    url_private: string;
+  }[];
+};
 
-  if (ts) {
-    await client.chat.update({ ts, ...args });
-  } else {
-    await client.chat.postMessage(args);
-  }
+export async function postImageToSlack({ client, prompt, imageUrls, channel }: PostImageToSlackArgs): Promise<unknown> {
+  return Promise.all(
+    imageUrls.map(async (imageUrl) => {
+      const response = await fetch(imageUrl);
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      const tempDir = os.tmpdir();
+      const tempFilePath = path.join(tempDir, `${prompt}.png`);
+      fs.writeFileSync(tempFilePath, buffer);
+
+      const result = await client.files.uploadV2({
+        channel_id: channel,
+        title: prompt,
+        alt_text: prompt,
+        initial_comment: prompt,
+        file: fs.createReadStream(tempFilePath),
+        filename: `${prompt}.png`,
+      });
+
+      // 一時ファイルを削除
+      fs.unlinkSync(tempFilePath);
+
+      const resultFiles = result.files as UploadFiles;
+      return resultFiles[0].files[0];
+    }),
+  );
 }
 
 export function isGenericMessageEvent(event: KnownEventFromType<"message">): event is GenericMessageEvent {
