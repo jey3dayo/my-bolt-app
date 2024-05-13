@@ -135,6 +135,18 @@ export async function postImageToSlack({ client, prompt, imageUrls, channel }: P
   );
 }
 
+export function getChannelType(channelId: string): "dm" | "public_channel" | "private_channel" | "unknown" {
+  if (channelId.startsWith("D")) {
+    return "dm";
+  } else if (channelId.startsWith("C")) {
+    return "public_channel";
+  } else if (channelId.startsWith("G")) {
+    return "private_channel";
+  } else {
+    return "unknown";
+  }
+}
+
 export function isGenericMessageEvent(event: KnownEventFromType<"message">): event is GenericMessageEvent {
   return event.channel_type === "im";
 }
