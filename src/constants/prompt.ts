@@ -9,6 +9,6 @@ export const systemPrompt = {
 export const promptsOfReaction: { [key: string]: string } = {
   youyaku: "要約してください",
   summary: "要約してください",
-  eiyaku: "英訳してください",
-  nitiei: "English please",
+  honyaku: "日本語に翻訳してください",
+  eiyaku: "Please translate it into English.",
 };
