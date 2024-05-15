@@ -1,9 +1,27 @@
 import { AllMiddlewareArgs, SlackEventMiddlewareArgs } from "@slack/bolt";
 import { createErrorMessage, getHistory } from "../../lib/slack";
 import { getResponse, summaryChatStream } from "../../llms/openai";
+import { promptsOfReaction } from "../../constants/prompt";
 
-const targetReactions = ["youyaku"];
-const matchRegex = /youyaku|summary/;
+function getPrompt(reaction: string): string | null {
+  return promptsOfReaction[reaction] || null;
+}
+
+type FetchHistoryTextProps = {
+  client: AllMiddlewareArgs["client"];
+  event: SlackEventMiddlewareArgs<"reaction_added">["event"];
+  logger: AllMiddlewareArgs["logger"];
+};
+
+const fetchHistoryText = async ({ client, event, logger }: FetchHistoryTextProps): Promise<string | null> => {
+  const history = await getHistory({ client, event });
+  if (!history || history.length === 0) {
+    throw new Error("history is empty");
+  }
+  const text = history.shift() ?? null;
+  logger.info(`history: ${text}`);
+  return text;
+};
 
 const appMentionCallback = async ({
   client,
@@ -13,18 +31,17 @@ const appMentionCallback = async ({
 }: AllMiddlewareArgs & SlackEventMiddlewareArgs<"reaction_added">) => {
   logger.info("[reaction_added]");
 
-  if (!(targetReactions.includes(event.reaction) || event.reaction.match(matchRegex))) {
-    return;
-  }
+  if (!event.reaction) return;
 
   try {
     // TODO: スレッドの中のテキストを読み取りたいがスレッドの親になってる
-    const history = await getHistory({ client, event });
-    if (!history) throw new Error("history is empty");
-    const text = history.shift();
-    logger.info(`history: ${text}`);
+    const text = await fetchHistoryText({ client, event, logger });
+    if (!text) return;
 
-    const stream = await summaryChatStream(text!, logger);
+    const prompt = getPrompt(event.reaction);
+    if (!prompt) return;
+
+    const stream = await summaryChatStream(text, prompt, logger);
     const responseText = await getResponse(stream);
     if (!responseText) return;
 

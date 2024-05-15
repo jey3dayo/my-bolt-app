@@ -4,3 +4,11 @@ export const systemPrompt = {
   chat: `${commomMessage}回答はSlackに投稿されるため、Slackで表示する時に見やすいフォーマットで返答してください。`,
   emotion: `${commomMessage}発言に応じてslackのemotionを重複せず複数返します。 例: thumbsup,beers,dancer`,
 };
+
+// reactionに対応するprompt
+export const promptsOfReaction: { [key: string]: string } = {
+  youyaku: "要約してください",
+  summary: "要約してください",
+  eiyaku: "英訳してください",
+  nitiei: "English please",
+};

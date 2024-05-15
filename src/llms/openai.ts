@@ -36,11 +36,11 @@ export async function generateChatStream(threadMessages: Message[], logger: any)
   }
 }
 
-export async function summaryChatStream(text: string, logger: any) {
+export async function summaryChatStream(message: string, prompt: string, logger: any) {
   try {
     const messages = [new SystemMessage(systemPrompt.chat)];
-    messages.push(new AIMessage("要約してください"));
-    messages.push(new HumanMessage(text));
+    messages.push(new AIMessage(prompt));
+    messages.push(new HumanMessage(message));
 
     return createChatStream(messages);
   } catch (error) {
