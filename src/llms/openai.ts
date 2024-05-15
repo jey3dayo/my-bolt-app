@@ -1,17 +1,11 @@
 import { OpenAI } from "openai";
 import { ChatOpenAI } from "@langchain/openai";
 import { StringOutputParser } from "@langchain/core/output_parsers";
-import { AIMessage, HumanMessage } from "@langchain/core/messages";
+import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { IterableReadableStream } from "@langchain/core/utils/stream";
 import type { Message } from "../lib/slack";
-import {
-  templateSystemMessage,
-  defaultModel,
-  defaultImageModel,
-  BOT_USER,
-  templateEmotionMessage,
-  IMAGE_SIZE,
-} from "../constants";
+import { defaultModel, defaultImageModel, BOT_USER, IMAGE_SIZE } from "../constants";
+import { systemPrompt } from "../constants/prompt";
 import { BaseLanguageModelInput } from "@langchain/core/language_models/base";
 
 const chatModel = new ChatOpenAI({
@@ -28,7 +22,7 @@ export function createChatStream(messages: BaseLanguageModelInput) {
 
 export async function generateChatStream(threadMessages: Message[], logger: any) {
   try {
-    const messages = [templateSystemMessage];
+    const messages = [new SystemMessage(systemPrompt.chat)];
 
     threadMessages?.forEach((message) => {
       if (!message.text) return;
@@ -44,7 +38,7 @@ export async function generateChatStream(threadMessages: Message[], logger: any)
 
 export async function summaryChatStream(text: string, logger: any) {
   try {
-    const messages = [templateSystemMessage];
+    const messages = [new SystemMessage(systemPrompt.chat)];
     messages.push(new AIMessage("要約してください"));
     messages.push(new HumanMessage(text));
 
@@ -67,7 +61,7 @@ export async function getResponse(stream: IterableReadableStream<string>) {
 
 export async function getEmotion(threadMessages: Message[], logger: any) {
   try {
-    const messages = [templateEmotionMessage];
+    const messages = [new SystemMessage(systemPrompt.emotion)];
 
     threadMessages?.forEach((message) => {
       if (!message.text) return;
