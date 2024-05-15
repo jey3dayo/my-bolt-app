@@ -16,7 +16,9 @@ type FetchHistoryTextProps = {
 const fetchHistoryText = async ({ client, event, logger }: FetchHistoryTextProps): Promise<string | null> => {
   const history = await getHistory({ client, event });
   if (!history || history.length === 0) {
-    throw new Error("history is empty");
+    const msg = "Error: history is empty";
+    logger.error(msg);
+    throw new Error(msg);
   }
   const text = history.shift() ?? null;
   logger.info(`history: ${text}`);
