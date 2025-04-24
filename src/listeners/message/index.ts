@@ -1,4 +1,4 @@
-import { App } from "@slack/bolt";
+import type { App } from "@slack/bolt";
 import imCallback from "./im";
 import sampleMessageCallback from "./sample-message";
 import keywordCallback from "./keyword";

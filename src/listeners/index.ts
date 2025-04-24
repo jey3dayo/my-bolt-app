@@ -1,4 +1,4 @@
-import { App } from "@slack/bolt";
+import type { App } from "@slack/bolt";
 import events from "./events";
 import message from "./message";
 import commands from "./commands";

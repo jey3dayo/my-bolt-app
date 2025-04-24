@@ -1,7 +1,7 @@
-import fs from "fs";
-import util from "util";
-import os from "os";
-import path from "path";
+import fs from "node:fs";
+import util from "node:util";
+import os from "node:os";
+import path from "node:path";
 import slackBolt, { LogLevel } from "@slack/bolt";
 import type { App, Context, GenericMessageEvent, AppMentionEvent, KnownEventFromType } from "@slack/bolt";
 import { env } from "../env";
@@ -26,7 +26,7 @@ export function getSlackApp() {
     token: env.SLACK_BOT_TOKEN,
     signingSecret: env.SLACK_SIGNING_SECRET,
     appToken: env.SLACK_APP_TOKEN,
-    port: parseInt(env.PORT, 10) || 3000,
+    port: Number.parseInt(env?.PORT ?? "3000", 10),
     socketMode: true,
     logLevel: LogLevel.INFO,
   });
@@ -61,7 +61,7 @@ export async function getReplies({ client, event, context }: getRepliesArgs): Pr
     inclusive: true,
   });
 
-  if (replies && replies?.messages) {
+  if (replies?.messages) {
     const summary = replies.messages.map((v) => {
       const userId = v?.user ?? "";
       return {
@@ -81,14 +81,24 @@ type getHistoryArgs = {
   event: KnownEventFromType<"reaction_added">;
 };
 
-export async function getHistory({ client, event }: getHistoryArgs): Promise<string[] | undefined | null> {
-  const history = await client.conversations.history({
-    channel: event.item.channel,
-    latest: event.item.ts,
-    inclusive: true,
-    limit: 1,
-  });
-  return history ? history?.messages?.map((v) => v.text!).filter((v) => !!v) : null;
+export async function getHistory({ client, event }: getHistoryArgs): Promise<string[]> {
+  try {
+    const response = await client.conversations.history({
+      channel: event.item.channel,
+      latest: event.item.ts,
+      inclusive: true,
+      limit: 1,
+    });
+
+    if (!response?.messages?.length) {
+      throw new Error(`No messages found for channel: ${event.item.channel}, ts: ${event.item.ts}`);
+    }
+
+    return response.messages.map((v) => v.text ?? "");
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    throw new Error(`Failed to fetch message history: ${errorMessage}`);
+  }
 }
 
 type PostImageToSlackArgs = {
@@ -138,13 +148,17 @@ export async function postImageToSlack({ client, prompt, imageUrls, channel }: P
 export function getChannelType(channelId: string): "dm" | "public_channel" | "private_channel" | "unknown" {
   if (channelId.startsWith("D")) {
     return "dm";
-  } else if (channelId.startsWith("C")) {
-    return "public_channel";
-  } else if (channelId.startsWith("G")) {
-    return "private_channel";
-  } else {
-    return "unknown";
   }
+  
+  if (channelId.startsWith("C")) {
+    return "public_channel";
+  }
+  
+  if (channelId.startsWith("G")) {
+    return "private_channel";
+  }
+  
+  return "unknown";
 }
 
 export function isGenericMessageEvent(event: KnownEventFromType<"message">): event is GenericMessageEvent {

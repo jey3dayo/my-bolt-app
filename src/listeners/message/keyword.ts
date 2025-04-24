@@ -1,4 +1,4 @@
-import { AllMiddlewareArgs, SlackEventMiddlewareArgs } from "@slack/bolt";
+import type { AllMiddlewareArgs, SlackEventMiddlewareArgs } from "@slack/bolt";
 import { createErrorMessage, getReplies } from "../../lib/slack";
 import { getEmotion, getResponse } from "../../llms/openai";
 
