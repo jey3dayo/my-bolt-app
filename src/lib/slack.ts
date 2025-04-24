@@ -165,8 +165,11 @@ export function isGenericMessageEvent(event: KnownEventFromType<"message">): eve
   return event.channel_type === "im";
 }
 
-export function createErrorMessage(error: Error) {
-  return ["エラーが発生しました", `message: ${error.message}`, `stack: ${error.stack}`].join("\n");
+export function createErrorMessage(error: unknown) {
+  if (error instanceof Error) {
+    return ["エラーが発生しました", `message: ${error.message}`, `stack: ${error.stack}`].join("\n");
+  }
+  return ["エラーが発生しました", `message: ${String(error)}`].join("\n");
 }
 
 export function beautifyJSON(json: unknown) {
