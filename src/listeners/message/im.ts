@@ -1,4 +1,4 @@
-import { AllMiddlewareArgs, GenericMessageEvent, SlackEventMiddlewareArgs } from "@slack/bolt";
+import type { AllMiddlewareArgs, GenericMessageEvent, SlackEventMiddlewareArgs } from "@slack/bolt";
 import { createErrorMessage, getReplies } from "../../lib/slack";
 import { generateChatStream, getResponse } from "../../llms/openai";
 
