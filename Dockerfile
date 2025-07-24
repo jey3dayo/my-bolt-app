@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN npm install -g pnpm@9.1.0
+RUN npm install -g pnpm@10
 RUN pnpm install
 
 COPY . .
@@ -18,7 +18,7 @@ WORKDIR /app
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/package.json ./
 
-RUN npm install -g pnpm@9.1.0 && pnpm install --prod
+RUN npm install -g pnpm@10 && pnpm install --prod
 
 EXPOSE 3000
 
