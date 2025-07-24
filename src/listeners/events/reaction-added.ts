@@ -25,7 +25,7 @@ const fetchHistoryText = async ({ client, event, logger }: FetchHistoryTextProps
   return text;
 };
 
-const appMentionCallback = async ({
+const reactionAddedHandler = async ({
   client,
   event,
   say,
@@ -58,4 +58,4 @@ const appMentionCallback = async ({
   }
 };
 
-export default appMentionCallback;
+export default reactionAddedHandler;

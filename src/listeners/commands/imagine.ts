@@ -31,8 +31,9 @@ async function imagineCallback({
     await postImageToSlack({ client, prompt, imageUrls, channel });
 
     // 投稿を削除
-    const ts = event.ts!;
-    await client.chat.delete({ channel, ts });
+    if (event.ts) {
+      await client.chat.delete({ channel, ts: event.ts });
+    }
   } catch (error) {
     logger.error(error);
     await say(createErrorMessage(error));

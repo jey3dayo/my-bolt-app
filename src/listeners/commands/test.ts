@@ -1,7 +1,7 @@
 import { AllMiddlewareArgs, SlackCommandMiddlewareArgs } from "@slack/bolt";
 import { beautifyJSON, createErrorMessage } from "../../lib/slack";
 
-async function exampleCallback({
+async function testHandler({
   ack,
   command,
   say,
@@ -27,4 +27,4 @@ async function exampleCallback({
   }
 }
 
-export default exampleCallback;
+export default testHandler;

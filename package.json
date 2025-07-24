@@ -20,6 +20,7 @@
     "format": "run-s format:eslint format:prettier",
     "format:eslint": "eslint --cache --fix ./src",
     "format:prettier": "prettier --write --ignore-path .prettierignore './**/*.ts'",
+    "report:similarity": "similarity-ts src --threshold 0.87 --min-lines 5 --print > reports/similarity-report.md",
     "test": "run-p lint:*",
     "all": "run-s format build test"
   },

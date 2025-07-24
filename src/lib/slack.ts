@@ -149,15 +149,15 @@ export function getChannelType(channelId: string): "dm" | "public_channel" | "pr
   if (channelId.startsWith("D")) {
     return "dm";
   }
-  
+
   if (channelId.startsWith("C")) {
     return "public_channel";
   }
-  
+
   if (channelId.startsWith("G")) {
     return "private_channel";
   }
-  
+
   return "unknown";
 }
 
